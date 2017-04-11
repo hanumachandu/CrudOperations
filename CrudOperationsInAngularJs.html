@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<title></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script>
+	var app=angular.module('app',[]);
+	//controller file
+	app.controller('my_controller',function($scope){
+		var empid=1;
+		$scope.employes=[{id:0,name:'Employe1',address:"Hyderabad",dept:"developer"}];
+
+		//saveOperation
+		$scope.saveRecord=function(){
+			if($scope.newEmployee.id==null){
+				$scope.newEmployee.id=empid++;
+				$scope.employes.push($scope.newEmployee);
+				$scope.newEmployee={};
+			} else{
+				for(i in $scope.employes){
+					if($scope.employes[i].id==$scope.newEmployee.id){
+						$scope.employes[i]=$scope.newEmployee;
+					}
+				}
+			}
+		}
+
+		//deleteOperation
+		$scope.delete = function (id) {
+ 					console.log(id);
+                for (i in $scope.employes) {
+                    if ($scope.employes[i].id == id) {
+                        $scope.employes.splice(i, 1);
+                        $scope.newEmployee = {};
+                    }
+                }
+            }
+
+         //editOperation
+		$scope.edit=function(id){
+			for(i in $scope.employes){
+				if($scope.employes[i].id==id){
+					$scope.newEmployee=angular.copy($scope.employes[i]);
+				}
+			}
+		}
+	})
+	</script>
+</head>
+<body>
+<div ng-controller="my_controller">
+	 <label>Name</label>
+            <input type="text" name="name" ng-model="newEmployee.name"/>
+            <label>Address</label>
+            <input type="text" name="address" ng-model="newEmployee.address"/>
+            <label>Dept.</label>
+            <input type="text" name="dept" ng-model="newEmployee.dept"/>
+            <br/>
+            <input type="hidden" ng-model="newEmployee.id" />
+            <input type="button" value="Save" ng-click="saveRecord()" class="btn btn-primary"/>
+            <br><br>
+            <table border="1px" rules="all">
+            	<tr>
+            		<th>Name</th>
+            		<th>Address</th>
+            		<th>Department</th>
+            		<th>Id</th>
+            		<th>Action</th>
+            	</tr>
+            	<tr ng-repeat="employe in employes">
+            		<td>{{employe.name}}</td>
+            		<td>{{employe.address}}</td>
+            		<td>{{employe.dept}}</td>
+            		<td>{{employe.id}}</td>
+            		<td>
+                        <a  href="#" ng-click="edit(employe.id)">edit</a> | 
+                        <a href="#" ng-click="delete(employe.id)">delete</a>
+                    </td>
+            	</tr>
+            </table>
+           
+</div>
+</body>
+</html>
